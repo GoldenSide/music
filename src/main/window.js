@@ -14,7 +14,8 @@ function createWindow() {
         show: false,
         backgroundColor: '#f6f6f6',
         webPreferences: {
-            backgroundThrottling: false
+            backgroundThrottling: false,
+            webSecurity: false,
         },
         icon: __static + '/images/logo_256.png'
     })
@@ -36,7 +37,7 @@ function createBackgroundWindow(parent, width, x, y) {
         frame: false,
         x,
         y,
-        parent,
+        // parent,
         transparent: true,
         alwaysOnTop: true,
         show: false,
@@ -47,6 +48,12 @@ function createBackgroundWindow(parent, width, x, y) {
         hasShadow: false
     })
     backgroundWindow.loadURL(winURL)
+    // linux下定时置顶
+    if (process.platform !== 'darwin' && process.platform !== 'win32') {
+        setInterval(() => {
+            backgroundWindow.setAlwaysOnTop(true)
+        }, 1000)
+    }
     // backgroundWindow.webContents.openDevTools({detach: true})
     return backgroundWindow
 }
